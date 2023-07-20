@@ -15,9 +15,9 @@ void main() {
     if (userSelect == 1) {
       adminPenal(students);
     } else if (userSelect == 2) {
-      studentPenal();
+      studentPenal(students);
     } else if (userSelect == 3) {
-      exit();
+      return;
     } else {
       print('Please choice a correct number');
     }
@@ -33,6 +33,9 @@ void adminPenal(Map<int, Map<String, dynamic>> students) {
     print(' 2. display Student ');
     print(' 3. search');
     print(' 4. Remove student ');
+    print(' 5. return for main menu ');
+    print(' 6. Update student if you want');
+    print('Please select any one number');
 
     int userSelect = int.parse(stdin.readLineSync()!);
 
@@ -42,9 +45,17 @@ void adminPenal(Map<int, Map<String, dynamic>> students) {
       displayStudents(students);
     } else if (userSelect == 3) {
       searchStd(students);
+    } else if (userSelect == 4) {
+      removeStudent(students);
+    } else if (userSelect == 5) {
+      main();
+    } else if (userSelect == 6) {
+      updateFunc(students);
     }
   }
 }
+
+/// Student Add Function ///
 
 void addStudent(Map<int, Map<String, dynamic>> addStudents) {
   print('Enter student details:');
@@ -62,9 +73,14 @@ void addStudent(Map<int, Map<String, dynamic>> addStudents) {
   print('Marks: ');
   double marks = double.parse(stdin.readLineSync()!);
 
-  addStudents[rollNo] = {'name': name, 'marks': marks};
+  addStudents[rollNo] = {
+    'name': name,
+    'marks': marks,
+  };
   print('Student added successfully!');
 }
+
+/// Student Display Function ///
 
 void displayStudents(Map<int, Map<String, dynamic>> displayStudentsFunc) {
   print('Display Student');
@@ -77,6 +93,8 @@ void displayStudents(Map<int, Map<String, dynamic>> displayStudentsFunc) {
     });
   }
 }
+
+/// Student Search by id Function ///
 
 void searchStd(Map<int, Map<String, dynamic>> searchingStd) {
   print('Please enter student Roll No');
@@ -91,5 +109,60 @@ void searchStd(Map<int, Map<String, dynamic>> searchingStd) {
   }
 }
 
-studentPenal() {}
-exit() {}
+/// Student portal ///
+
+void studentPenal(Map<int, Map<String, dynamic>> studentPenalFunc) {
+  while (true) {
+    print('Welcome to student penal');
+    print('1: Display Student');
+    print('2: Search Student');
+    print('3: Exit ');
+    print('Please select any one number');
+
+    int userSelect = int.parse(stdin.readLineSync()!);
+    if (userSelect == 1) {
+      displayStudents(studentPenalFunc);
+    } else if (userSelect == 2) {
+      searchStd(studentPenalFunc);
+    } else if (userSelect == 3) {
+      return;
+    }
+  }
+}
+
+// remove student //
+
+void removeStudent(Map<int, Map<String, dynamic>> removeStd) {
+  print('remove Student');
+  print('enter Student ID for removing student');
+
+  int userSelect = int.parse(stdin.readLineSync()!);
+
+  if (removeStd.containsKey(userSelect)) {
+    removeStd.remove(userSelect);
+    print('Student remove successfully');
+  } else {
+    print('Student not found');
+  }
+}
+
+// update //
+
+void updateFunc(Map<int, Map<String, dynamic>> updateStd) {
+  print('If you want to update student please enter Student ID');
+
+  int id = int.parse(stdin.readLineSync()!);
+
+  if (updateStd.containsKey(id)) {
+    print('Enter Update Roll no');
+    int updId = int.parse(stdin.readLineSync()!);
+
+    print('Enter Updated Name');
+    String nameUpd = stdin.readLineSync()!;
+
+    print('Updated marks');
+    double marks = double.parse(stdin.readLineSync()!);
+
+    updateStd[id] = {'rollNo': updId, 'name': nameUpd, 'marks': marks};
+  }
+}
