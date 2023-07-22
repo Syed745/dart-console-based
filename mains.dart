@@ -1,6 +1,22 @@
 import 'dart:io';
 
 void main() {
+  bool isAuth = false;
+  String userName = 'admin';
+  String password = 'admin123';
+
+  print('Enter your username:');
+  String inputUsername = stdin.readLineSync()!;
+  print('Enter your password:');
+  String inputPassword = stdin.readLineSync()!;
+
+  if (inputUsername == userName && inputPassword == password) {
+    isAuth = true;
+  } else {
+    print('Invalid credentials. Exiting...');
+    return;
+  }
+
   Map<int, Map<String, dynamic>> students = {};
 
   while (true) {
@@ -13,13 +29,15 @@ void main() {
     int userSelect = int.parse(stdin.readLineSync()!);
 
     if (userSelect == 1) {
-      adminPenal(students);
+      if (isAuth) {
+        adminPenal(students);
+      }
     } else if (userSelect == 2) {
       studentPenal(students);
     } else if (userSelect == 3) {
       return;
     } else {
-      print('Please choice a correct number');
+      print('Please choose a correct number');
     }
   }
 }
@@ -88,8 +106,10 @@ void displayStudents(Map<int, Map<String, dynamic>> displayStudentsFunc) {
     print("There are no registered students");
   } else {
     displayStudentsFunc.forEach((rollNo, value) {
+      double marks = value['marks'];
+      String grade = calculateGrade(marks);
       print(
-          'Roll No: $rollNo, Name: ${value['name']}, Marks: ${value['marks']}');
+          'Roll No: $rollNo, Name: ${value['name']}, Marks: $marks, Grade: $grade');
     });
   }
 }
@@ -146,7 +166,7 @@ void removeStudent(Map<int, Map<String, dynamic>> removeStd) {
   }
 }
 
-// update //
+// update Func //
 
 void updateFunc(Map<int, Map<String, dynamic>> updateStd) {
   print('If you want to update student please enter Student ID');
@@ -164,5 +184,26 @@ void updateFunc(Map<int, Map<String, dynamic>> updateStd) {
     double marks = double.parse(stdin.readLineSync()!);
 
     updateStd[id] = {'rollNo': updId, 'name': nameUpd, 'marks': marks};
+    print('User Edit successfully');
+  } else {
+    print('Student not fount');
+  }
+}
+
+// Marks Func //
+
+String calculateGrade(double marks) {
+  if (marks >= 90) {
+    return 'A+';
+  } else if (marks >= 80) {
+    return 'A';
+  } else if (marks >= 70) {
+    return 'B';
+  } else if (marks >= 60) {
+    return 'C';
+  } else if (marks >= 50) {
+    return 'D';
+  } else {
+    return 'F';
   }
 }
