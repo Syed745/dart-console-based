@@ -1,9 +1,37 @@
 import 'dart:io';
+import 'dart:core';
 
 void main() {
+  Map<int, Map<String, dynamic>> students = {};
+
+  while (true) {
+    print('\nWelcome to Student Management System');
+    print(' 1. Admin Panel');
+    print(' 2. Student Panel');
+    print(' 3. Exit');
+    print('\nPlease select any one number');
+
+    int userSelect = int.parse(stdin.readLineSync()!);
+
+    if (userSelect == 1) {
+      adminPenal(students);
+    } else if (userSelect == 2) {
+      studentPenal(students);
+    } else if (userSelect == 3) {
+      return;
+    } else {
+      print('\nPlease choose a correct number');
+    }
+  }
+}
+
+DateTime now = DateTime.now();
+
+String userName = 'admin';
+String password = 'admin123';
+
+void adminAuth() {
   bool isAuth = false;
-  String userName = 'admin';
-  String password = 'admin123';
 
   print('Enter your username:');
   String inputUsername = stdin.readLineSync()!;
@@ -13,37 +41,25 @@ void main() {
   if (inputUsername == userName && inputPassword == password) {
     isAuth = true;
   } else {
-    print('Invalid credentials. Exiting...');
-    return;
+    print('Invalid credentials.Please enter correct username and password...');
+    main();
   }
+}
 
-  Map<int, Map<String, dynamic>> students = {};
+String? inputUsername;
+void stdAuth() {
+  print('Enter your username:');
+  inputUsername = stdin.readLineSync()!;
+  print('Enter your password:');
+  String inputPassword = stdin.readLineSync()!;
 
-  while (true) {
-    print('\nWelcome to Student Management System');
-    print(' 1. Admin Panel');
-    print(' 2. Student Panel');
-    print(' 3. Exit');
-    print('Please select any one number');
-
-    int userSelect = int.parse(stdin.readLineSync()!);
-
-    if (userSelect == 1) {
-      if (isAuth) {
-        adminPenal(students);
-      }
-    } else if (userSelect == 2) {
-      studentPenal(students);
-    } else if (userSelect == 3) {
-      return;
-    } else {
-      print('Please choose a correct number');
-    }
-  }
+  print('Login with Student $inputUsername at $now');
 }
 
 void adminPenal(Map<int, Map<String, dynamic>> students) {
   // code for the admin panel here...
+  adminAuth();
+  print('Login With $userName at $now');
 
   while (true) {
     print('\nWelcome to Admin penal');
@@ -53,6 +69,7 @@ void adminPenal(Map<int, Map<String, dynamic>> students) {
     print(' 4. Remove student ');
     print(' 5. return for main menu ');
     print(' 6. Update student if you want');
+    print(' 7. Logout with Admin');
     print('Please select any one number');
 
     int userSelect = int.parse(stdin.readLineSync()!);
@@ -69,6 +86,9 @@ void adminPenal(Map<int, Map<String, dynamic>> students) {
       main();
     } else if (userSelect == 6) {
       updateFunc(students);
+    } else if (userSelect == 7) {
+      print('$userName logout at $now');
+      return;
     }
   }
 }
@@ -121,9 +141,11 @@ void searchStd(Map<int, Map<String, dynamic>> searchingStd) {
 
   int rollNo = int.parse(stdin.readLineSync()!);
   if (searchingStd.containsKey(rollNo)) {
+    String grade = calculateGrade(searchingStd[rollNo]!['marks']);
+    String name = searchingStd[rollNo]!['name'];
+    double marks = searchingStd[rollNo]!['marks'];
     print('Student found:');
-    print(
-        'Roll No: $rollNo, Name: ${searchingStd[rollNo]!['name']}, Marks: ${searchingStd[rollNo]!['marks']}');
+    print('Roll No: $rollNo, Name: $name, Marks: $marks  $grade');
   } else {
     print('No Student Found');
   }
@@ -132,11 +154,13 @@ void searchStd(Map<int, Map<String, dynamic>> searchingStd) {
 /// Student portal ///
 
 void studentPenal(Map<int, Map<String, dynamic>> studentPenalFunc) {
+  stdAuth();
+
   while (true) {
     print('Welcome to student penal');
     print('1: Display Student');
     print('2: Search Student');
-    print('3: Exit ');
+    print('3: Logout with student ID ');
     print('Please select any one number');
 
     int userSelect = int.parse(stdin.readLineSync()!);
@@ -145,6 +169,7 @@ void studentPenal(Map<int, Map<String, dynamic>> studentPenalFunc) {
     } else if (userSelect == 2) {
       searchStd(studentPenalFunc);
     } else if (userSelect == 3) {
+      print('Logout Student $inputUsername at $now');
       return;
     }
   }
